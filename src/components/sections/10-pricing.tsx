@@ -15,7 +15,14 @@ import { cn } from "@/lib/cn";
  */
 export function Pricing() {
   const [currency, setCurrency] = useState("NPR");
+  const [mode, setMode] = useState<"monthly" | "payonce">("monthly");
   const plan = pricing.plans[0];
+
+  const isBuyout = mode === "payonce";
+  const priceAmount = isBuyout
+    ? convert(plan.buyout?.NPR ?? 0, "NPR", currency)
+    : convert(plan.base.NPR, "NPR", currency);
+  const billingLabel = isBuyout ? "one-time / shop" : plan.billing;
 
   return (
     <div className="mx-auto grid max-w-4xl gap-10 lg:grid-cols-[1fr_360px] lg:items-start">
@@ -32,12 +39,18 @@ export function Pricing() {
           <div className="mt-6 flex items-baseline gap-2">
             <span className="font-display text-5xl font-black tracking-tight text-paper sm:text-6xl">
               {formatMoney(
-                convert(plan.base.NPR, "NPR", currency),
+                priceAmount,
                 currency,
               )}
             </span>
-            <span className="text-paper-dim">/ {plan.billing}</span>
+            <span className="text-paper-dim">/ {billingLabel}</span>
           </div>
+
+          {isBuyout && (
+            <p className="mt-2 font-grotesk text-sm text-copper-bright">
+              Pay once, own the software. {plan.billing.replace("per shop / ", "")} billing also available.
+            </p>
+          )}
 
           <p className="mt-4 max-w-md text-paper-dim">{plan.description}</p>
 
@@ -74,7 +87,7 @@ export function Pricing() {
           </div>
 
           <p className="mt-6 text-sm text-metal">
-            {pricing.note}.{" "}
+            {plan.buyoutNote} {pricing.note}.{" "}
             <a
               href={`mailto:${site.contact.email}`}
               className="underline underline-offset-4 hover:text-paper-dim"
@@ -85,9 +98,44 @@ export function Pricing() {
         </div>
       </div>
 
-      {/* Currency selector */}
+      {/* Billing mode + currency selector */}
       <div className="order-1 lg:order-2">
         <label className="font-grotesk mb-3 block text-xs tracking-[0.2em] text-metal uppercase">
+          How you pay
+        </label>
+        <div className="flex flex-wrap gap-2">
+          {(
+            [
+              { id: "monthly", label: "Monthly" },
+              { id: "payonce", label: "One-time pay" },
+            ] as const
+          ).map((m) => (
+            <button
+              key={m.id}
+              type="button"
+              onClick={() => {
+                setMode(m.id);
+                feedback("select");
+              }}
+              aria-pressed={mode === m.id}
+              className={cn(
+                "rounded-full border px-3.5 py-2 text-sm transition-colors duration-150",
+                mode === m.id
+                  ? "border-copper bg-copper-soft text-copper-bright"
+                  : "border-hairline text-paper-dim hover:border-hairline-strong hover:text-paper",
+              )}
+            >
+              {m.label}
+            </button>
+          ))}
+        </div>
+        <p className="mt-3 text-[13px] leading-relaxed text-metal">
+          {isBuyout
+            ? "Pay once for the software. Domain and deployment are set up and billed separately, so there are no surprise hosting fees bundled in."
+            : "A simple monthly rate. Domain and deployment are set up and billed separately, so there are no surprise hosting fees bundled in."}
+        </p>
+
+        <label className="font-grotesk mt-6 mb-3 block text-xs tracking-[0.2em] text-metal uppercase">
           Show pricing in
         </label>
         <div className="flex flex-wrap gap-2">

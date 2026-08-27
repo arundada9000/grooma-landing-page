@@ -92,6 +92,10 @@ export interface PricePoint {
   base: Record<CurrencyCode, number>;
   /** Billing note shown next to the price (annual discount etc.). */
   billing: string;
+  /** Optional one-time-pay price (you buy the software once). */
+  buyout?: Record<CurrencyCode, number>;
+  /** Note that domain/deployment are not included in either option. */
+  buyoutNote?: string;
   cta: string;
   featured?: boolean;
 }
@@ -136,6 +140,8 @@ export const pricing: {
       ],
       base: { NPR: 2999, USD: 22 },
       billing: "per shop / month",
+      buyout: { NPR: 15000, USD: 110 },
+      buyoutNote: "Domain and deployment are not included in either option.",
       cta: "Start your shop",
       featured: true,
     },
