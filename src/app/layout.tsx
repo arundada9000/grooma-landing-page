@@ -57,6 +57,9 @@ export const metadata: Metadata = {
   creator: site.creator.name,
   authors: [{ name: site.creator.name, url: site.creator.portfolio }],
   category: "Business & Productivity",
+  verification: {
+    google: "y_iQncnrIS7Nycs-SFAgvF9aPPyozMkTeJhrDnmS2R0",
+  },
   robots: {
     index: true,
     follow: true,
