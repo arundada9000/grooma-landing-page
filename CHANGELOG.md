@@ -34,5 +34,5 @@ this project adheres to [Semantic Versioning](https://semver.org/).
 ### Fixed
 
 - Mobile layout: floating controls no longer overlap the bottom navigation.
-- Demo confirmation no longer gets stuck — phone validation now accepts any
+- Demo confirmation no longer gets stuck: phone validation now accepts any
   reasonably formatted number with 6+ digits.

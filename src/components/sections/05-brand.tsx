@@ -22,7 +22,7 @@ export function Brand() {
           <Reveal delay={0.08}>
             <p className="mt-4 max-w-md text-lg leading-relaxed text-paper-dim">
               Grooma doesn&apos;t make every barbershop look like Grooma. Your
-              customers see <em className="not-italic text-paper">your</em> shop —
+              customers see <em className="not-italic text-paper">your</em> shop:
               its name, its colours, its look. Chosen in settings, reflected
               everywhere, with zero deploys.
             </p>

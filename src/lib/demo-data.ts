@@ -110,7 +110,7 @@ function seeded(n: number): number {
 
 /**
  * The demo "shop's" constraints for a day:
- *   open 09:00–19:00, lunch break 13:00–14:00.
+ *   open 09:00-19:00, lunch break 13:00-14:00.
  * Existing appointments fill some chairs.
  */
 export const DEMO_DAY = {

@@ -16,16 +16,16 @@ design critique are just as welcome.
 
 ## Ways to contribute
 
-- **Report a bug** — open an issue with steps to reproduce.
-- **Propose a change** — open an issue *before* writing a pull request so we can
+- **Report a bug**: open an issue with steps to reproduce.
+- **Propose a change**: open an issue *before* writing a pull request so we can
   agree on scope.
-- **Polish the site** — copy, visual design, accessibility, performance.
-- **Fix a reproducible bug** — only after a maintainer has invited a fix.
+- **Polish the site**: copy, visual design, accessibility, performance.
+- **Fix a reproducible bug**: only after a maintainer has invited a fix.
 
 ## Before you open a PR
 
 1. Fork the repository (if your license permits) or work on a feature branch.
-2. Follow the existing code style — this project uses TypeScript strict mode,
+2. Follow the existing code style: this project uses TypeScript strict mode,
    Tailwind tokens, `cn()` for class merging, and no stray inline hex values.
 3. Run `pnpm install`, then `pnpm build` and confirm it passes.
 4. Keep changes small and focused. One logical change per pull request.
@@ -44,7 +44,7 @@ design critique are just as welcome.
 ## Our standards
 
 - Ask before adding dependencies.
-- Match the honesty rules described in the `README` — no fake customer data.
+- Match the honesty rules described in the `README`: no fake customer data.
 - Be respectful in every interaction (see `CODE_OF_CONDUCT`).
 
 ## Questions

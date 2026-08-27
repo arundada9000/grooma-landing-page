@@ -25,13 +25,13 @@ interface ConstraintLine {
 }
 
 const CONSTRAINTS: ConstraintLine[] = [
-  { label: "Shop hours", value: "09:00 – 19:00" },
-  { label: "Lunch break", value: "13:00 – 14:00" },
+  { label: "Shop hours", value: "09:00 - 19:00" },
+  { label: "Lunch break", value: "13:00 - 14:00" },
   { label: "Service", value: "45 minutes" },
   { label: "Already booked", value: "10:00 · 14:30 · 16:00" },
 ];
 
-const BREAK_RANGE = [60 * 13, 60 * 14]; // 13:00–14:00 in minutes
+const BREAK_RANGE = [60 * 13, 60 * 14]; // 13:00-14:00 in minutes
 const OPEN = 9 * 60;
 const CLOSE = 19 * 60;
 const DURATION = 45;

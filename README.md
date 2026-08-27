@@ -1,4 +1,4 @@
-# Grooma — Landing Site
+# Grooma - Landing Site
 
 The marketing site for **Grooma**, a barbershop booking and shop-management
 software built Nepal-first. The barber's floor, digitized.
@@ -84,7 +84,7 @@ public/
 ```
 
 The single source of truth for the site URL and brand details lives in
-`src/config/site.ts` — change it in one place to reflect everywhere.
+`src/config/site.ts` - change it in one place to reflect everywhere.
 
 ## Theming
 

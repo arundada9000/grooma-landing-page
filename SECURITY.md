@@ -28,7 +28,7 @@ Include as much of the following as you can:
 ## Scope
 
 This repository is the **marketing website** for Grooma. It is a static,
-front-end-only site — booking demos run entirely in the browser with no
+front-end-only site. Booking demos run entirely in the browser with no
 backend and no real customer data. Reported issues should focus on:
 
 - Exposure of secrets, tokens, or personal data in the repository.

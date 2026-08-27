@@ -28,7 +28,7 @@
 }
 
 /* ============================================================
-   Foundation palette — DEFAULT (before theme JS / copper · dark)
+   Foundation palette - DEFAULT (before theme JS / copper · dark)
    ============================================================ */
 @theme {
   --color-ink: #0b0a09;
@@ -71,7 +71,7 @@
 }
 
 /* ============================================================
-   Default semantic tokens (copper · dark) — applied even before the
+   Default semantic tokens (copper · dark) - applied even before the
    theme provider runs, so the derived tokens above always resolve.
    ============================================================ */
 :root {
@@ -86,7 +86,7 @@
 }
 
 /* ============================================================
-   Theme presets × schemes — re-resolve the semantic tokens.
+   Theme presets × schemes - re-resolve the semantic tokens.
    Mirrors Grooma's real preset palettes (src/lib/theme/presets.ts).
    Every rule lists: page bg, raised/card panel, warm panel, fg, fg-dim,
    metal, hairline, accent, accent-soft, on-accent. bright/deep/hairline-strong
