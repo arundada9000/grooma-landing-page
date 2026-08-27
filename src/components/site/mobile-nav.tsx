@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/cn";
 import { feedback } from "@/lib/sound";
 
@@ -48,6 +49,7 @@ const ITEMS = [
 
 export function MobileNav() {
   const pathname = usePathname();
+  const reduce = useReducedMotion();
 
   return (
     <nav
@@ -65,11 +67,29 @@ export function MobileNav() {
               onClick={() => feedback("click")}
               aria-current={active ? "page" : undefined}
               className={cn(
-                "flex min-h-12 cursor-pointer flex-col items-center justify-center gap-1 px-2 text-[11px] font-medium transition-colors",
+                "group relative flex min-h-12 cursor-pointer touch-manipulation flex-col items-center justify-center gap-1 px-2 text-[11px] font-medium transition-colors duration-200",
                 active ? "text-copper-bright" : "text-paper-dim hover:text-paper",
               )}
             >
-              {icons[it.icon]}
+              {active ? (
+                <motion.span
+                  layoutId="mobile-nav-active"
+                  transition={
+                    reduce
+                      ? { duration: 0 }
+                      : { type: "spring", stiffness: 400, damping: 32 }
+                  }
+                  className="absolute inset-1.5 -z-10 rounded-2xl border border-copper/40 bg-copper-soft"
+                />
+              ) : null}
+              <span
+                className={cn(
+                  "transition-transform duration-200",
+                  active ? "-translate-y-0.5 scale-110" : "group-hover:scale-105",
+                )}
+              >
+                {icons[it.icon]}
+              </span>
               {it.label}
             </Link>
           );
@@ -77,7 +97,7 @@ export function MobileNav() {
         <Link
           href="/about"
           onClick={() => feedback("click")}
-          className="flex min-h-12 cursor-pointer items-center justify-center gap-1.5 px-4 text-xs font-semibold text-on-accent"
+          className="flex min-h-12 cursor-pointer touch-manipulation items-center justify-center gap-1.5 px-4 text-xs font-semibold text-on-accent transition-opacity duration-200 active:opacity-85"
           style={{ background: "var(--color-copper)" }}
         >
           {icons.start}

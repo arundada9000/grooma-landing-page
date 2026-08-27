@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/cn";
 import { feedback } from "@/lib/sound";
 import { ThemeToggle } from "./theme-toggle";
@@ -62,11 +63,25 @@ export function Header() {
                 onClick={() => feedback("click")}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "rounded-full px-3 py-2 text-sm transition-colors",
+                  "group relative rounded-full px-3.5 py-2 text-sm transition-colors duration-200",
                   active ? "text-paper" : "text-paper-dim hover:text-paper",
                 )}
               >
                 {l.label}
+                {active ? (
+                  <motion.span
+                    layoutId="header-nav-active"
+                    transition={{ type: "spring", stiffness: 400, damping: 32 }}
+                    className="absolute inset-0 -z-10 rounded-full border border-copper/50 bg-copper-soft"
+                  />
+                ) : null}
+                <span
+                  className={cn(
+                    "absolute inset-x-3.5 -bottom-0.5 h-px origin-left scale-x-0 bg-copper-bright transition-transform duration-300 ease-out group-hover:scale-x-100",
+                    active && "scale-x-0",
+                  )}
+                  aria-hidden="true"
+                />
               </Link>
             );
           })}
@@ -77,14 +92,14 @@ export function Header() {
           <Link
             href="/about"
             onClick={() => feedback("click")}
-            className="hidden rounded-full border border-copper text-copper-bright px-4 py-2 text-sm font-medium transition-colors hover:bg-copper-soft sm:inline-flex"
+            className="hidden rounded-full border border-copper text-copper-bright px-4 py-2 text-sm font-medium transition-all duration-200 hover:bg-copper-soft hover:-translate-y-0.5 sm:inline-flex"
           >
             Start your shop
           </Link>
           <Link
             href="/demo"
             onClick={() => feedback("click")}
-            className="rounded-full border border-copper bg-copper text-sm font-medium text-on-accent px-4 py-2 transition-opacity hover:opacity-90"
+            className="rounded-full border border-copper bg-copper text-sm font-medium text-on-accent px-4 py-2 transition-all duration-200 hover:opacity-90 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-copper/20"
           >
             Try the demo
           </Link>
