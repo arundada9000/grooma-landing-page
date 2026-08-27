@@ -1,0 +1,424 @@
+@import "tailwindcss";
+
+/* ============================================================
+   Grooma Marketing, Visual system
+   "The barber's floor, digitized."
+   Dark, tactile, editorial. Metal, leather, paper, chrome.
+   The product remains the hero; these materials give it a floor.
+
+   The whole site is themed exactly like the product: a theme preset
+   (data-theme on <html>) + a scheme (data-scheme) re-resolve every
+   semantic token below from the same source values as Grooma's real
+   presets. Components only ever reference the token names, so a
+   visitor restyles the entire site by picking a theme.
+   ============================================================ */
+
+/* ---- Type faces (declared in layout; mapped here) ---- */
+@theme inline {
+  --font-display: var(--font-archivo), var(--font-devanagari), system-ui, sans-serif;
+  --font-sans: var(--font-inter), var(--font-devanagari), system-ui, sans-serif;
+  --font-grotesk: var(--font-space), var(--font-devanagari), system-ui, sans-serif;
+}
+
+/* ---- Motion primitives ---- */
+@theme inline {
+  --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-metal: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================================
+   Foundation palette — DEFAULT (before theme JS / copper · dark)
+   ============================================================ */
+@theme {
+  --color-ink: #0b0a09;
+  --color-ink-soft: #131110;
+  --color-onyx: #1a1715;
+  --color-leather: #262219;
+  --color-paper: #f2ede4;
+  --color-paper-dim: #b8b0a4;
+  --color-metal: #8a857c;
+  --color-metal-bright: #c9c4bb;
+  --color-hairline: rgba(242, 237, 228, 0.1);
+  --color-hairline-strong: rgba(242, 237, 228, 0.18);
+
+  --color-copper: #c98a4b;
+  --color-copper-bright: #e2ab6a;
+  --color-copper-deep: #8a5a30;
+  --color-copper-soft: rgba(201, 138, 75, 0.14);
+  --color-on-accent: #14100c;
+
+  /* State colors (semantic, theme-independent) */
+  --color-ok-soft: rgba(159, 198, 164, 0.14);
+  --color-warn: #d9a06b;
+  --color-warn-soft: rgba(217, 160, 107, 0.14);
+  --color-bad: #c98a8a;
+  --color-bad-soft: rgba(201, 138, 138, 0.14);
+}
+
+/* ============================================================
+   Derived tokens that stay consistent for any theme/scheme.
+   ============================================================ */
+@theme inline {
+  /* raised panels & warm "leather" surfaces always track the theme */
+  --color-ink-soft: var(--color-panel);
+  --color-onyx: var(--color-panel);
+  /* copper-bright: the "lifted" accent used for small text & highlights */
+  --color-copper-bright: var(--color-accent-bright);
+  --color-copper-deep: var(--color-accent-deep);
+  --color-copper-soft: var(--color-accent-soft);
+  --color-metal-bright: var(--color-fg);
+}
+
+/* ============================================================
+   Default semantic tokens (copper · dark) — applied even before the
+   theme provider runs, so the derived tokens above always resolve.
+   ============================================================ */
+:root {
+  --color-panel: #131110;
+  --color-fg: #f2ede4;
+  --color-fg-dim: #b8b0a4;
+  --color-accent: #c98a4b;
+  --color-accent-soft: rgba(201, 138, 75, 0.14);
+  --color-on-accent: #14100c;
+  --color-accent-bright: #e2ab6a;
+  --color-accent-deep: #8a5a30;
+}
+
+/* ============================================================
+   Theme presets × schemes — re-resolve the semantic tokens.
+   Mirrors Grooma's real preset palettes (src/lib/theme/presets.ts).
+   Every rule lists: page bg, raised/card panel, warm panel, fg, fg-dim,
+   metal, hairline, accent, accent-soft, on-accent. bright/deep/hairline-strong
+   are derived via color-mix so they stay legible on either scheme.
+   ============================================================ */
+
+/* ---- Copper (Grooma's default brand) ---- */
+[data-theme="copper"][data-scheme="dark"],
+[data-theme="classic-barbershop"][data-scheme="dark"],
+[data-theme="classic-barbershop"] {
+  --color-ink: #14100c;
+  --color-panel: #201a14;
+  --color-leather: color-mix(in oklab, #201a14 72%, #cf9d61 28%);
+  --color-fg: #f3ece1;
+  --color-fg-dim: rgba(240, 228, 210, 0.76);
+  --color-metal: rgba(240, 228, 210, 0.52);
+  --color-hairline: rgba(230, 208, 178, 0.14);
+  --color-accent: #cf9d61;
+  --color-accent-soft: rgba(207, 157, 97, 0.18);
+  --color-on-accent: #241708;
+}
+[data-theme="copper"][data-scheme="light"],
+[data-theme="classic-barbershop"][data-scheme="light"] {
+  --color-ink: #f6f3ee;
+  --color-panel: #fffdf9;
+  --color-leather: color-mix(in oklab, #fffdf9 74%, #84572a 26%);
+  --color-fg: #231a10;
+  --color-fg-dim: rgba(74, 58, 38, 0.78);
+  --color-metal: rgba(74, 58, 38, 0.5);
+  --color-hairline: rgba(74, 58, 38, 0.14);
+  --color-accent: #84572a;
+  --color-accent-soft: rgba(132, 87, 42, 0.13);
+  --color-on-accent: #fdf7ee;
+}
+
+/* ---- Midnight ---- */
+[data-theme="midnight"][data-scheme="dark"],
+[data-theme="midnight"] {
+  --color-ink: #070a12;
+  --color-panel: #0e1422;
+  --color-leather: color-mix(in oklab, #0e1422 70%, #a3b6ff 30%);
+  --color-fg: #e9eef9;
+  --color-fg-dim: rgba(214, 224, 245, 0.72);
+  --color-metal: rgba(214, 224, 245, 0.5);
+  --color-hairline: rgba(140, 165, 215, 0.14);
+  --color-accent: #a3b6ff;
+  --color-accent-soft: rgba(163, 182, 255, 0.2);
+  --color-on-accent: #0a1024;
+}
+[data-theme="midnight"][data-scheme="light"] {
+  --color-ink: #10141f;
+  --color-panel: #171d2c;
+  --color-leather: color-mix(in oklab, #171d2c 72%, #96abff 28%);
+  --color-fg: #e9eef9;
+  --color-fg-dim: rgba(214, 224, 245, 0.78);
+  --color-metal: rgba(214, 224, 245, 0.55);
+  --color-hairline: rgba(160, 180, 220, 0.16);
+  --color-accent: #96abff;
+  --color-accent-soft: rgba(150, 171, 255, 0.16);
+  --color-on-accent: #0a1024;
+}
+
+/* ---- Minimal ---- */
+[data-theme="minimal"][data-scheme="dark"],
+[data-theme="minimal"] {
+  --color-ink: #0a0a0a;
+  --color-panel: #161616;
+  --color-leather: #232323;
+  --color-fg: #ededed;
+  --color-fg-dim: rgba(237, 237, 237, 0.62);
+  --color-metal: rgba(237, 237, 237, 0.45);
+  --color-hairline: rgba(237, 237, 237, 0.12);
+  --color-accent: #ededed;
+  --color-accent-soft: rgba(237, 237, 237, 0.1);
+  --color-on-accent: #111111;
+}
+[data-theme="minimal"][data-scheme="light"] {
+  --color-ink: #fafafa;
+  --color-panel: #ffffff;
+  --color-leather: #ececec;
+  --color-fg: #111111;
+  --color-fg-dim: rgba(17, 17, 17, 0.62);
+  --color-metal: rgba(17, 17, 17, 0.45);
+  --color-hairline: rgba(17, 17, 17, 0.12);
+  --color-accent: #111111;
+  --color-accent-soft: rgba(0, 0, 0, 0.06);
+  --color-on-accent: #ffffff;
+}
+
+/* ---- Emerald ---- */
+[data-theme="emerald"][data-scheme="dark"],
+[data-theme="emerald"] {
+  --color-ink: #0a120e;
+  --color-panel: #13201a;
+  --color-leather: color-mix(in oklab, #13201a 70%, #46d68f 30%);
+  --color-fg: #e9f5ee;
+  --color-fg-dim: rgba(220, 240, 228, 0.74);
+  --color-metal: rgba(220, 240, 228, 0.5);
+  --color-hairline: rgba(190, 230, 205, 0.14);
+  --color-accent: #46d68f;
+  --color-accent-soft: rgba(70, 214, 143, 0.16);
+  --color-on-accent: #06231a;
+}
+[data-theme="emerald"][data-scheme="light"] {
+  --color-ink: #f2f7f4;
+  --color-panel: #ffffff;
+  --color-leather: color-mix(in oklab, #ffffff 74%, #0e7a54 26%);
+  --color-fg: #10241a;
+  --color-fg-dim: rgba(25, 70, 50, 0.76);
+  --color-metal: rgba(25, 70, 50, 0.5);
+  --color-hairline: rgba(25, 70, 50, 0.14);
+  --color-accent: #0e7a54;
+  --color-accent-soft: rgba(14, 122, 84, 0.13);
+  --color-on-accent: #edfaf3;
+}
+
+/* ---- Ocean ---- */
+[data-theme="ocean"][data-scheme="dark"],
+[data-theme="ocean"] {
+  --color-ink: #081117;
+  --color-panel: #101c24;
+  --color-leather: color-mix(in oklab, #101c24 70%, #4cc7e0 30%);
+  --color-fg: #e9f3f7;
+  --color-fg-dim: rgba(215, 235, 245, 0.74);
+  --color-metal: rgba(215, 235, 245, 0.5);
+  --color-hairline: rgba(185, 220, 235, 0.14);
+  --color-accent: #4cc7e0;
+  --color-accent-soft: rgba(76, 199, 224, 0.16);
+  --color-on-accent: #04252e;
+}
+[data-theme="ocean"][data-scheme="light"] {
+  --color-ink: #f0f5f7;
+  --color-panel: #ffffff;
+  --color-leather: color-mix(in oklab, #ffffff 74%, #0d6e8c 26%);
+  --color-fg: #0e2029;
+  --color-fg-dim: rgba(30, 75, 95, 0.8);
+  --color-metal: rgba(30, 75, 95, 0.5);
+  --color-hairline: rgba(30, 75, 95, 0.14);
+  --color-accent: #0d6e8c;
+  --color-accent-soft: rgba(13, 110, 140, 0.12);
+  --color-on-accent: #e9f6fb;
+}
+
+/* ---- Editorial ---- */
+[data-theme="editorial"][data-scheme="dark"],
+[data-theme="editorial"] {
+  --color-ink: #0c0c0c;
+  --color-panel: #181817;
+  --color-leather: #242422;
+  --color-fg: #f2f0ea;
+  --color-fg-dim: rgba(235, 232, 225, 0.64);
+  --color-metal: rgba(235, 232, 225, 0.5);
+  --color-hairline: rgba(225, 222, 215, 0.14);
+  --color-accent: #ece9e2;
+  --color-accent-soft: rgba(236, 233, 226, 0.1);
+  --color-on-accent: #141414;
+}
+[data-theme="editorial"][data-scheme="light"] {
+  --color-ink: #faf9f6;
+  --color-panel: #ffffff;
+  --color-leather: #efeee9;
+  --color-fg: #141414;
+  --color-fg-dim: rgba(20, 20, 20, 0.64);
+  --color-metal: rgba(20, 20, 20, 0.45);
+  --color-hairline: rgba(20, 20, 20, 0.12);
+  --color-accent: #1a1a1a;
+  --color-accent-soft: rgba(0, 0, 0, 0.06);
+  --color-on-accent: #fafaf7;
+}
+
+/* Once any theme+scheme is active, derive the legible variants. */
+html[data-theme] {
+  --color-paper: var(--color-fg);
+  --color-paper-dim: var(--color-fg-dim);
+  --color-hairline-strong: color-mix(in srgb, var(--color-fg) 30%, transparent);
+}
+html[data-theme] [data-scheme="dark"] {
+  --color-accent-bright: color-mix(in oklab, var(--color-accent) 58%, white 42%);
+  --color-accent-deep: color-mix(in oklab, var(--color-accent) 72%, black 28%);
+}
+html[data-theme] [data-scheme="light"] {
+  --color-accent-bright: color-mix(in oklab, var(--color-accent) 72%, black 28%);
+  --color-accent-deep: color-mix(in oklab, var(--color-accent) 58%, black 42%);
+}
+
+/* ---- Base ---- */
+html,
+body {
+  overscroll-behavior-y: none;
+}
+
+body {
+  background: var(--color-ink);
+  color: var(--color-fg);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.01em;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+}
+
+:where(a, button, [role="button"], input, textarea, select, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-accent-bright);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+button:not(:disabled),
+select:not(:disabled),
+summary,
+[role="button"]:not([aria-disabled="true"]),
+[role="radio"]:not([aria-disabled="true"]),
+[role="switch"]:not([aria-disabled="true"]),
+label[for] {
+  cursor: pointer;
+}
+
+button,
+summary,
+[role="button"],
+[role="radio"],
+[role="switch"],
+[role="tab"] {
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+@media (pointer: fine) and (hover: hover) {
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  a[href] {
+    transition:
+      transform 0.12s var(--ease-metal),
+      background-color 0.2s var(--ease-metal),
+      border-color 0.2s var(--ease-metal),
+      color 0.2s var(--ease-metal),
+      box-shadow 0.25s var(--ease-out-soft),
+      opacity 0.2s var(--ease-metal);
+  }
+  button:not(:disabled):active:not(:focus-visible),
+  [role="button"]:not([aria-disabled="true"]):active {
+    transform: translateY(1px) scale(0.985);
+  }
+}
+
+@utility press {
+  transition: transform 0.12s var(--ease-metal);
+}
+@media (pointer: fine) and (hover: hover) {
+  .press:active {
+    transform: translateY(2px) scale(0.97);
+  }
+}
+
+details > summary {
+  list-style: none;
+}
+details > summary::-webkit-details-marker {
+  display: none;
+}
+
+@utility hairline {
+  border: 1px solid var(--color-hairline);
+}
+
+@utility hairlines {
+  box-shadow: inset 0 0 0 1px var(--color-hairline);
+}
+
+@utility hairline-top {
+  box-shadow: inset 0 1px 0 var(--color-hairline);
+}
+
+@utility grain {
+  position: relative;
+}
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.5;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (pointer: fine) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-leather) transparent;
+  }
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-leather);
+    border-radius: 8px;
+    border: 2px solid var(--color-ink);
+  }
+}
+
+/* color-scheme follows the active scheme so native controls match. */
+html {
+  color-scheme: dark;
+}
+html[data-scheme="light"] {
+  color-scheme: light;
+}
