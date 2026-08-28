@@ -1,19 +1,21 @@
 import { ImageResponse } from "next/og";
 import { site } from "@/config/site";
 import { DEMO_SERVICES } from "@/lib/demo-data";
+import { OG } from "@/lib/og";
 
 export const alt = "Grooma: barbershop booking & shop management software";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-const INK = "#0b0a09";
-const PAPER = "#f2ede4";
-const DIM = "#9a9188";
-const COPPER = "#c8813f";
-const COPPER_ON = "#14100c";
-const HAIR = "#2a2520";
-
-const fp = (color: string) => ({ fontSize: 40, fontWeight: 900, letterSpacing: -1, color });
+// Mirrors the site's default preset (minimal - dark) so a shared link and
+// the page a visitor lands on read as the same product. Kept in step with
+// the shared card palette in src/lib/og.tsx.
+const INK = OG.ink;
+const PAPER = OG.paper;
+const DIM = OG.dim;
+const ACCENT = OG.accent;
+const ON_ACCENT = OG.onAccent;
+const HAIR = OG.hairline;
 
 /**
  * OG / social image. Reads as the product itself: a real booking surface
@@ -47,7 +49,7 @@ export default function OgImage() {
             width: "100%",
             height: "100%",
             display: "flex",
-            background: "radial-gradient(120% 100% at 50% 0%, #17130f 0%, #0b0a09 60%)",
+            background: "radial-gradient(120% 100% at 50% 0%, #171717 0%, #0a0a0a 60%)",
           }}
         />
 
@@ -80,7 +82,7 @@ export default function OgImage() {
                   height: 34,
                   borderRadius: 8,
                   flexShrink: 0,
-                  background: "repeating-linear-gradient(135deg, #c8813f 0 8px, #14100c 8px 16px)",
+                  background: `repeating-linear-gradient(135deg, ${ACCENT} 0 8px, ${INK} 8px 16px)`,
                 }}
               />
               <div style={{ display: "flex", flexDirection: "column" }}>
@@ -95,7 +97,7 @@ export default function OgImage() {
                 display: "flex",
                 flexDirection: "row",
                 marginTop: 40,
-                background: "#14110d",
+                background: OG.panel,
                 border: `1px solid ${HAIR}`,
                 borderRadius: 22,
                 padding: 26,
@@ -115,13 +117,13 @@ export default function OgImage() {
                       gap: 12,
                       padding: "12px 14px",
                       borderRadius: 12,
-                      border: `1px solid ${s.name === "Haircut" ? COPPER : HAIR}`,
-                      background: s.name === "Haircut" ? "#201810" : "transparent",
+                      border: `1px solid ${s.name === "Haircut" ? ACCENT : HAIR}`,
+                      background: s.name === "Haircut" ? OG.inset : "transparent",
                     }}
                   >
                     <span style={{ fontSize: 19, color: PAPER, flex: 1 }}>{s.name}</span>
                     <span style={{ fontSize: 16, color: DIM }}>{s.enDuration}</span>
-                    <span style={{ fontSize: 17, color: COPPER, fontWeight: 700, marginLeft: 10 }}>NPR {s.priceNpr}</span>
+                    <span style={{ fontSize: 17, color: ACCENT, fontWeight: 700, marginLeft: 10 }}>NPR {s.priceNpr}</span>
                   </div>
                 ))}
               </div>
@@ -136,9 +138,9 @@ export default function OgImage() {
                       justifyContent: "center",
                       padding: "10px 12px",
                       borderRadius: 10,
-                      background: i === 2 ? COPPER : "transparent",
-                      color: i === 2 ? COPPER_ON : DIM,
-                      border: `1px solid ${i === 2 ? COPPER : HAIR}`,
+                      background: i === 2 ? ACCENT : "transparent",
+                      color: i === 2 ? ON_ACCENT : DIM,
+                      border: `1px solid ${i === 2 ? ACCENT : HAIR}`,
                       fontSize: 18,
                       fontWeight: i === 2 ? 700 : 500,
                     }}
@@ -178,18 +180,18 @@ export default function OgImage() {
               maxWidth: 380,
             }}
           >
-            <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 10, color: COPPER }}>
+            <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 10, color: ACCENT }}>
               <div
                 style={{
                   width: 26,
                   height: 26,
                   borderRadius: "50%",
-                  border: `3px solid ${COPPER}`,
+                  border: `3px solid ${ACCENT}`,
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
                   fontSize: 15,
-                  color: COPPER,
+                  color: ACCENT,
                 }}
               >
                 OK

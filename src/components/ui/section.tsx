@@ -26,7 +26,8 @@ export function Section({
     <section
       id={id}
       className={cn(
-        "relative",
+        // scroll-mt keeps an anchored section clear of the fixed header.
+        "relative scroll-mt-20",
         bleed
           ? "border-hairline-top bg-ink-soft py-14 sm:py-28"
           : "py-14 sm:py-28",

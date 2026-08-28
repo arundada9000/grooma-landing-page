@@ -5,14 +5,17 @@ import { GuestJourney } from "@/components/sections/02-guest-journey";
 import { Availability } from "@/components/sections/03-availability";
 import { OwnerDay } from "@/components/sections/06-owner-day";
 import { Engine } from "@/components/sections/09-engine";
+import { ProductTour } from "@/components/sections/13-product-tour";
 import { PricingSection } from "@/components/sections/10-pricing-section";
 import { Faq } from "@/components/sections/12-faq";
 import { FinalCta } from "@/components/sections/11-final-cta";
+import { Photo } from "@/components/ui/photo";
 import { Reveal } from "@/components/ui/reveal";
 import { StructuredData } from "@/components/seo/structured-data";
 import { buildPageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = buildPageMetadata({
+/** One description of this route, read by both the <head> and the JSON-LD. */
+const PAGE = {
   title: "Grooma | Barbershop booking & shop management software",
   description:
     "Grooma is barbershop booking software that computes real availability, prevents double-bookings, and keeps your own shop the brand. No account for your customers. Works in English and नेपाली.",
@@ -28,12 +31,14 @@ export const metadata: Metadata = buildPageMetadata({
     "guest booking no account",
     "Grooma",
   ],
-});
+};
+
+export const metadata: Metadata = buildPageMetadata(PAGE);
 
 export default function HomePage() {
   return (
     <>
-      <StructuredData />
+      <StructuredData page={PAGE} withFaq withHowTo />
       <Hero />
 
       <div id="book" className="scroll-mt-20" aria-hidden="true" />
@@ -87,7 +92,22 @@ export default function HomePage() {
 
       <Availability />
       <OwnerDay />
+
+      <ProductTour
+        heading="What the shop actually sees."
+        blurb="Three surfaces, drawn as the product: the day at a glance, the app that keeps working offline, and the QR code on the counter."
+      />
+
       <Engine />
+
+      <Photo
+        src="/images/barbershop-5.jpg"
+        alt="A barber finishing a customer's haircut in a busy shop"
+        ratio="21 / 9"
+        sizes="(max-width: 1152px) 100vw, 1152px"
+        className="mx-auto my-14 w-full max-w-6xl"
+      />
+
       <PricingSection />
       <Faq />
       <FinalCta />

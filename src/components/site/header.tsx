@@ -6,18 +6,16 @@ import { usePathname } from "next/navigation";
 import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/cn";
 import { feedback } from "@/lib/sound";
+import { site } from "@/config/site";
 import { ThemeToggle } from "./theme-toggle";
 
-export const NAV_PAGES = [
-  { href: "/features", label: "Features" },
-  { href: "/pricing", label: "Pricing" },
-  { href: "/for-barbershops", label: "For barbershops" },
-  { href: "/about", label: "About" },
-] as const;
+/** Primary nav lives in the site config, one source of truth. */
+export const NAV_PAGES = site.nav;
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
+  const reduce = useReducedMotion();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -71,7 +69,11 @@ export function Header() {
                 {active ? (
                   <motion.span
                     layoutId="header-nav-active"
-                    transition={{ type: "spring", stiffness: 400, damping: 32 }}
+                    transition={
+                      reduce
+                        ? { duration: 0 }
+                        : { type: "spring", stiffness: 400, damping: 32 }
+                    }
                     className="absolute inset-0 -z-10 rounded-full border border-copper/50 bg-copper-soft"
                   />
                 ) : null}

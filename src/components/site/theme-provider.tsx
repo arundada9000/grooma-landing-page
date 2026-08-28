@@ -21,7 +21,7 @@ interface StoredTheme {
 }
 
 export interface ThemeContextValue {
-  /** The active preset id (defaults to the brand preset: copper). */
+  /** The active preset id (defaults to the site preset: minimal). */
   theme: ThemePreset["id"];
   scheme: Scheme;
   /** The preset object currently active. */
@@ -37,7 +37,7 @@ export interface ThemeContextValue {
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
-const DEFAULT_THEME = "copper";
+const DEFAULT_THEME = "minimal";
 const DEFAULT_SCHEME: Scheme = "dark";
 
 function readStored(): StoredTheme {

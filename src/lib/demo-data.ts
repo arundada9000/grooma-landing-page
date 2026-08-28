@@ -88,8 +88,6 @@ export interface DemoSlot {
   barberId: string;
 }
 
-const MINUTES_PER_DAY = 24 * 60;
-
 /** Turn a "09:00" style string into minutes of day. */
 function toMinute(hhmm: string): number {
   const [h, m] = hhmm.split(":").map(Number);
@@ -116,7 +114,6 @@ function seeded(n: number): number {
 export const DEMO_DAY = {
   open: toMinute("09:00"),
   close: toMinute("19:00"),
-  breaks: [] as Array<{ start: number; end: number }>,
 };
 
 // Lunch break removes a chunk of availability on weekdays; the demo day
@@ -166,7 +163,10 @@ export function computeSlots(
   const drop = new Set<number>();
   if (barberId === ANY_BARBER) {
     for (let i = 0; i < 3; i++) {
-      drop.add(step * Math.floor((seeded(daySeed * 31 + i) * totalOpen) / step / 2) * 2);
+      // Offsets must be anchored to opening time. Measured from 0 they landed
+      // outside the trading day entirely and dropped nothing.
+      const offset = Math.floor((seeded(daySeed * 31 + i) * totalOpen) / step) * step;
+      drop.add(DEMO_DAY.open + offset);
     }
   }
 
@@ -206,5 +206,3 @@ export function computeSlots(
 export function formatNpr(npr: number): string {
   return `NPR ${npr.toLocaleString("en-US")}`;
 }
-
-export const MINUTES_PER_DAY_FOR_LABEL = MINUTES_PER_DAY;

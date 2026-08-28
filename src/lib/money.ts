@@ -13,7 +13,7 @@ const USD_VALUE: Record<string, number> = (() => {
   for (const c of fx.currencies) {
     if (c.code === "USD") table.USD = 1;
     else if (c.code === "NPR") table.NPR = fx.usdPerNpr;
-    else table[c.code] = c.usd;
+    else if (typeof c.usd === "number") table[c.code] = c.usd;
   }
   return table;
 })();

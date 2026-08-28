@@ -29,7 +29,7 @@ export default function ErrorPage({
       <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
         <button
           onClick={reset}
-          className="inline-flex h-13 items-center rounded-full bg-copper px-7 text-base font-semibold text-ink-soft transition-colors hover:bg-copper-bright"
+          className="inline-flex h-13 items-center rounded-full bg-copper px-7 text-base font-semibold text-on-accent transition-colors hover:bg-copper-bright"
         >
           Try again
         </button>

@@ -28,27 +28,31 @@
 }
 
 /* ============================================================
-   Foundation palette - DEFAULT (before theme JS / copper · dark)
+   Foundation palette - DEFAULT (before theme JS / minimal · dark)
    ============================================================ */
 @theme {
-  --color-ink: #0b0a09;
-  --color-ink-soft: #131110;
-  --color-onyx: #1a1715;
-  --color-leather: #262219;
-  --color-paper: #f2ede4;
-  --color-paper-dim: #b8b0a4;
-  --color-metal: #8a857c;
-  --color-metal-bright: #c9c4bb;
-  --color-hairline: rgba(242, 237, 228, 0.1);
-  --color-hairline-strong: rgba(242, 237, 228, 0.18);
+  --color-ink: #0a0a0a;
+  --color-ink-soft: #161616;
+  --color-onyx: #161616;
+  --color-leather: #232323;
+  --color-paper: #ededed;
+  --color-paper-dim: rgba(237, 237, 237, 0.62);
+  --color-metal: rgba(237, 237, 237, 0.45);
+  --color-metal-bright: #ededed;
+  --color-hairline: rgba(237, 237, 237, 0.12);
+  --color-hairline-strong: rgba(237, 237, 237, 0.24);
 
-  --color-copper: #c98a4b;
-  --color-copper-bright: #e2ab6a;
-  --color-copper-deep: #8a5a30;
-  --color-copper-soft: rgba(201, 138, 75, 0.14);
-  --color-on-accent: #14100c;
+  /* Named "copper" for historical reasons; these are the ACCENT tokens and
+     they re-resolve per theme. The values here are the minimal preset, the
+     site default, used only before the theme attributes are applied. */
+  --color-copper: #ededed;
+  --color-copper-bright: #f4f4f4;
+  --color-copper-deep: #a8a8a8;
+  --color-copper-soft: rgba(237, 237, 237, 0.1);
+  --color-on-accent: #111111;
 
   /* State colors (semantic, theme-independent) */
+  --color-ok: #9fc6a4;
   --color-ok-soft: rgba(159, 198, 164, 0.14);
   --color-warn: #d9a06b;
   --color-warn-soft: rgba(217, 160, 107, 0.14);
@@ -71,23 +75,24 @@
 }
 
 /* ============================================================
-   Default semantic tokens (copper · dark) - applied even before the
+   Default semantic tokens (minimal · dark) - applied even before the
    theme provider runs, so the derived tokens above always resolve.
+   Must mirror the [data-theme="minimal"][data-scheme="dark"] block below.
    ============================================================ */
 :root {
-  --color-panel: #131110;
-  --color-fg: #f2ede4;
-  --color-fg-dim: #b8b0a4;
-  --color-accent: #c98a4b;
-  --color-accent-soft: rgba(201, 138, 75, 0.14);
-  --color-on-accent: #14100c;
-  --color-accent-bright: #e2ab6a;
-  --color-accent-deep: #8a5a30;
+  --color-panel: #161616;
+  --color-fg: #ededed;
+  --color-fg-dim: rgba(237, 237, 237, 0.62);
+  --color-accent: #ededed;
+  --color-accent-soft: rgba(237, 237, 237, 0.1);
+  --color-on-accent: #111111;
+  --color-accent-bright: #f4f4f4;
+  --color-accent-deep: #a8a8a8;
 }
 
 /* ============================================================
    Theme presets × schemes - re-resolve the semantic tokens.
-   Mirrors Grooma's real preset palettes (src/lib/theme/presets.ts).
+   Mirrors the presets in src/lib/themes.ts.
    Every rule lists: page bg, raised/card panel, warm panel, fg, fg-dim,
    metal, hairline, accent, accent-soft, on-accent. bright/deep/hairline-strong
    are derived via color-mix so they stay legible on either scheme.
@@ -263,13 +268,48 @@ html[data-theme] {
   --color-paper-dim: var(--color-fg-dim);
   --color-hairline-strong: color-mix(in srgb, var(--color-fg) 30%, transparent);
 }
-html[data-theme] [data-scheme="dark"] {
-  --color-accent-bright: color-mix(in oklab, var(--color-accent) 58%, white 42%);
-  --color-accent-deep: color-mix(in oklab, var(--color-accent) 72%, black 28%);
+/* Both readings of every colour that depends on how light the surface is.
+   The scheme rules below only pick between them. */
+:root {
+  --ok-on-dark: #9fc6a4;
+  --ok-on-light: #2f6b3c;
+  --bad-on-dark: #c98a8a;
+  --bad-on-light: #a33b3b;
+  --warn-on-dark: #d9a06b;
+  --warn-on-light: #8a5a1e;
 }
-html[data-theme] [data-scheme="light"] {
+
+/* NOTE: these must be COMPOUND selectors, not descendant ones. data-scheme
+   lives on the same <html> element as data-theme, so `html[data-theme]
+   [data-scheme]` (with a space) matches nothing, which left accent-bright
+   pinned to the copper default for every theme. */
+
+/* ---- Light surfaces ---- */
+html[data-theme][data-scheme="light"] {
   --color-accent-bright: color-mix(in oklab, var(--color-accent) 72%, black 28%);
   --color-accent-deep: color-mix(in oklab, var(--color-accent) 58%, black 42%);
+  --color-ok: var(--ok-on-light);
+  --color-ok-soft: color-mix(in srgb, var(--ok-on-light) 12%, transparent);
+  --color-bad: var(--bad-on-light);
+  --color-bad-soft: color-mix(in srgb, var(--bad-on-light) 12%, transparent);
+  --color-warn: var(--warn-on-light);
+  --color-warn-soft: color-mix(in srgb, var(--warn-on-light) 12%, transparent);
+}
+
+/* ---- Dark surfaces ---- */
+/* Midnight belongs here in BOTH schemes: its "light" preset is a lifted navy,
+   never a white page, so the light-surface treatment would put dark on dark.
+   Listed after the light rule so it wins on equal specificity. */
+html[data-theme][data-scheme="dark"],
+html[data-theme="midnight"][data-scheme="light"] {
+  --color-accent-bright: color-mix(in oklab, var(--color-accent) 58%, white 42%);
+  --color-accent-deep: color-mix(in oklab, var(--color-accent) 72%, black 28%);
+  --color-ok: var(--ok-on-dark);
+  --color-ok-soft: color-mix(in srgb, var(--ok-on-dark) 14%, transparent);
+  --color-bad: var(--bad-on-dark);
+  --color-bad-soft: color-mix(in srgb, var(--bad-on-dark) 14%, transparent);
+  --color-warn: var(--warn-on-dark);
+  --color-warn-soft: color-mix(in srgb, var(--warn-on-dark) 14%, transparent);
 }
 
 /* ---- Base ---- */

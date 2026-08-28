@@ -1,7 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  AnimatePresence,
+  motion,
+  useInView,
+  useReducedMotion,
+} from "framer-motion";
 import {
   ANY_BARBER,
   DEMO_BARBERS,
@@ -39,6 +44,10 @@ export function BookingFlow({
   showHeader?: boolean;
 }) {
   const reduce = useReducedMotion();
+  const rootRef = useRef<HTMLDivElement>(null);
+  // Autoplay only while the surface is actually on screen: an unattended
+  // loop running behind three screenfuls of page is pure battery drain.
+  const onScreen = useInView(rootRef, { amount: 0.3 });
   const [dir, setDir] = useState<1 | -1>(1);
   const [step, setStep] = useState<Step>("service");
   const [serviceId, setServiceId] = useState<string | null>(null);
@@ -46,7 +55,6 @@ export function BookingFlow({
   const [slotLabel, setSlotLabel] = useState<string | null>(null);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
-  const [cart, setCart] = useState(0);
 
   const service = useMemo(
     () => DEMO_SERVICES.find((s) => s.id === serviceId) ?? null,
@@ -60,6 +68,15 @@ export function BookingFlow({
     setDir(direction);
     setStep(next);
   }, []);
+
+  // The unattended demo never makes noise: sound belongs to a real tap.
+  const cue: typeof feedback = useCallback(
+    (nameArg, opts) => {
+      if (auto) return;
+      feedback(nameArg, opts);
+    },
+    [auto],
+  );
 
   // Slots are "computed" when the barber is chosen, a brief pause that
   // shows the engine at work, then the derived slots arrive.
@@ -82,24 +99,23 @@ export function BookingFlow({
     setBarberId(null);
     setSlotLabel(null);
     goTo("barber", 1);
-    feedback("click");
+    cue("click");
   };
   const chooseBarber = (id: string) => {
     setBarberId(id);
     setSlotLabel(null);
     setStep("computing");
     setDir(1);
-    setCart((c) => c + 1);
-    feedback("select", { haptic: true });
+    cue("select", { haptic: true });
   };
   const chooseSlot = (label: string) => {
     setSlotLabel(label);
     goTo("details", 1);
-    feedback("select");
+    cue("select");
   };
   const confirm = () => {
     goTo("confirm", 1);
-    feedback("confirm", { haptic: true });
+    cue("confirm", { haptic: true });
   };
   const reset = () => {
     setName("");
@@ -117,34 +133,54 @@ export function BookingFlow({
     /^[0-9]{6,15}$/.test(phone.replace(/[^\d]/g, ""));
 
   // Autoplay: a passive visitor (section 02) watches the journey unfold.
-  // Deterministic and scripted, the same human path, just unattended.
+  //
+  // The script advances one step per effect run and re-subscribes on every
+  // step change, so each beat reads the state the previous beat produced. A
+  // single "fire everything on a timeline" effect cannot work here: the slots
+  // and the validity flag only exist AFTER a service and barber are picked,
+  // so a timeline captured at mount would always see an empty slot list and
+  // stall on the time step.
   useEffect(() => {
-    if (!auto) return;
-    const timers: ReturnType<typeof setTimeout>[] = [];
-    const at = (ms: number) => ({
-      after(fn: () => void) {
-        timers.push(setTimeout(fn, reduce ? 0 : ms));
-      },
-    });
-    at(600).after(() => chooseService("haircut"));
-    at(2400).after(() => chooseBarber(ANY_BARBER));
-    at(5000).after(() => slots.length && chooseSlot(slots[0].label));
-    at(7000).after(() => {
-      setName("Sam");
-      setPhone("9812 34567x");
-    });
-    at(8800).after(() => {
-      if (detailsValid) confirm();
-    });
-    return () => timers.forEach(clearTimeout);
+    if (!auto || !onScreen) return;
+    const wait = (ms: number) => (reduce ? 120 : ms);
+
+    let t: ReturnType<typeof setTimeout> | undefined;
+    if (step === "service") {
+      t = setTimeout(() => chooseService("haircut"), wait(900));
+    } else if (step === "barber") {
+      t = setTimeout(() => chooseBarber(ANY_BARBER), wait(1400));
+    } else if (step === "time" && slots.length > 0) {
+      t = setTimeout(() => chooseSlot(slots[0].label), wait(1600));
+    } else if (step === "details") {
+      t = setTimeout(() => {
+        setName("Sam");
+        setPhone("9812 34567");
+      }, wait(1000));
+    } else if (step === "confirm") {
+      // Loop the story so a visitor arriving mid-cycle still sees it whole.
+      t = setTimeout(reset, wait(5200));
+    }
+    return () => clearTimeout(t);
+    // `chooseService` and friends are recreated each render but only ever
+    // call stable state setters, so the step/slots pair is the real trigger.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [auto, reduce]);
+  }, [auto, onScreen, reduce, step, slots]);
+
+  // Once the scripted details are filled in and pass the same validation a
+  // real guest faces, the autoplay confirms.
+  useEffect(() => {
+    if (!auto || !onScreen || step !== "details" || !detailsValid) return;
+    const t = setTimeout(confirm, reduce ? 120 : 1200);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [auto, onScreen, reduce, step, detailsValid]);
 
   const stepIndex = ["service", "barber", "time", "details"].indexOf(step);
   const showStepper = step !== "confirm" && step !== "computing" && stepIndex >= 0;
 
   return (
     <div
+      ref={rootRef}
       className="relative overflow-hidden rounded-[22px]"
       style={{
         backgroundColor: "var(--demo-bg)",
@@ -457,7 +493,12 @@ function ConfirmStep({
         animate={{ scale: 1, opacity: 1 }}
         transition={{ type: "spring", stiffness: 260, damping: 18 }}
         className="mx-auto mb-5 flex size-14 items-center justify-center rounded-full"
-        style={{ backgroundColor: "var(--demo-ok)20" }}
+        // `var(--demo-ok)20` is not a colour: appending hex alpha to a var()
+        // reference never parses, so the halo silently rendered transparent.
+        style={{
+          backgroundColor:
+            "color-mix(in srgb, var(--demo-ok) 18%, transparent)",
+        }}
       >
         <svg viewBox="0 0 24 24" fill="none" className="size-7">
           <path

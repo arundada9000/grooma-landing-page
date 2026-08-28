@@ -15,12 +15,37 @@ const STORE_KEY = "grooma:feedback";
 type SoundName = "click" | "select" | "confirm" | "error" | "toggle" | "swish";
 
 let ctx: AudioContext | null = null;
-let muted = false;
 
-try {
-  muted = localStorage.getItem(STORE_KEY) === "off";
-} catch {
-  muted = false;
+/**
+ * Muted until the visitor explicitly opts in. Anything other than a stored
+ * "on" keeps us quiet, so a first-time visitor (and every server render)
+ * makes no noise. Reading storage lazily also keeps this correct after
+ * hydration, where module scope ran without a `window`.
+ */
+let muted: boolean | null = null;
+
+function readMuted(): boolean {
+  if (muted !== null) return muted;
+  if (typeof window === "undefined") return true;
+  try {
+    muted = window.localStorage.getItem(STORE_KEY) !== "on";
+  } catch {
+    muted = true;
+  }
+  return muted;
+}
+
+/**
+ * Sound is decoration, so a visitor who asked the OS for less motion and
+ * fewer effects gets silence regardless of the stored preference.
+ */
+function prefersQuiet(): boolean {
+  if (typeof window === "undefined" || !window.matchMedia) return false;
+  try {
+    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  } catch {
+    return false;
+  }
 }
 
 function ac(): AudioContext | null {
@@ -86,7 +111,7 @@ const PATTERNS: Record<SoundName, () => void> = {
 
 /** Persistent mute preference. */
 export function isFeedbackEnabled(): boolean {
-  return !muted;
+  return !readMuted();
 }
 
 export function setFeedbackEnabled(on: boolean): void {
@@ -99,13 +124,14 @@ export function setFeedbackEnabled(on: boolean): void {
 }
 
 export function toggleFeedback(): boolean {
-  setFeedbackEnabled(muted);
-  return !muted;
+  const next = !isFeedbackEnabled();
+  setFeedbackEnabled(next);
+  return next;
 }
 
 /** Fully-on-first: initialize the AudioContext on the first user gesture. */
 export function primeFeedback(): void {
-  if (muted) return;
+  if (readMuted()) return;
   ac();
 }
 
@@ -115,7 +141,7 @@ export function primeFeedback(): void {
  * caller's job).
  */
 export function feedback(name: SoundName, { haptic = false } = {}): void {
-  if (muted) return;
+  if (readMuted() || prefersQuiet()) return;
   try {
     PATTERNS[name]?.();
   } catch {

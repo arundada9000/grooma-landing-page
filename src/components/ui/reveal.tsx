@@ -24,14 +24,14 @@ export function Reveal({
   once?: boolean;
 }) {
   const reduce = useReducedMotion();
-  if (reduce) {
-    return <div className={className}>{children}</div>;
-  }
+  // Always the same element, animated or not. Swapping motion.div for a plain
+  // div under reduced motion changed the rendered component between the server
+  // and the client's first paint, which tore down and rebuilt the subtree.
   return (
     <motion.div
       className={className}
-      initial={{ opacity: 0, y }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={reduce ? false : { opacity: 0, y }}
+      whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
       viewport={{ once, margin: "-8% 0px -8% 0px" }}
       transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay }}
     >

@@ -44,7 +44,7 @@ export function Interrupted() {
               <span className="rounded-full border border-hairline px-4 py-1.5 text-sm text-paper-dim">
                 Time
               </span>
-              <span className="rounded-full bg-copper px-4 py-1.5 text-sm text-ink-soft">
+              <span className="rounded-full bg-copper px-4 py-1.5 text-sm text-on-accent">
                 Booked
               </span>
             </div>

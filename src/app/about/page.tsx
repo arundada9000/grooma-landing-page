@@ -9,7 +9,8 @@ import { StructuredData } from "@/components/seo/structured-data";
 import { buildPageMetadata } from "@/lib/metadata";
 import { site } from "@/config/site";
 
-export const metadata: Metadata = buildPageMetadata({
+/** One description of this route, read by both the <head> and the JSON-LD. */
+const PAGE = {
   title: "About | Who makes Grooma & how to go live",
   description:
     "Grooma is built Nepal-first by Arun Neupane in Butwal, Lumbini. One real barbershop goes live at a time, onboarded personally. The shop is the brand; Grooma is the plumbing.",
@@ -21,12 +22,15 @@ export const metadata: Metadata = buildPageMetadata({
     "Sajilo Digital barbershop",
     "who makes Grooma",
   ],
-});
+  crumb: "About",
+};
+
+export const metadata: Metadata = buildPageMetadata(PAGE);
 
 export default function AboutPage() {
   return (
     <>
-      <StructuredData crumb={{ label: "About", path: "/about" }} />
+      <StructuredData page={PAGE} withFaq />
 
       <PageHero
         eyebrow="About"
@@ -44,9 +48,9 @@ export default function AboutPage() {
       <section className="relative pb-14 sm:pb-20">
         <div className="mx-auto grid w-full max-w-6xl items-center gap-10 px-5 sm:px-8 lg:grid-cols-2">
           <Photo
-            src="/images/barbershop-5.jpg"
+            src="/images/barbershop-4.jpg"
             alt="A barber shaping a customer's haircut"
-            ratio="4 / 3"
+            ratio="3 / 4"
             priority
           />
           <div>
@@ -186,7 +190,7 @@ export default function AboutPage() {
           <div className="mt-10 text-center">
             <Link
               href="/demo"
-              className="press inline-flex h-13 items-center gap-2 rounded-full bg-copper px-7 text-base font-semibold text-ink-soft hover:bg-copper-bright"
+              className="press inline-flex h-13 items-center gap-2 rounded-full bg-copper px-7 text-base font-semibold text-on-accent hover:bg-copper-bright"
             >
               Try the demo first
               <span aria-hidden="true">→</span>

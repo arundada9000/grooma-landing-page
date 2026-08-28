@@ -6,7 +6,7 @@ import Link from "next/link";
  */
 export default function NotFound() {
   return (
-    <main className="grain relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 text-center">
+    <main className="grain relative flex min-h-[75vh] flex-col items-center justify-center overflow-hidden px-6 py-24 text-center">
       <div
         className="pointer-events-none absolute inset-0"
         aria-hidden="true"
@@ -41,7 +41,7 @@ export default function NotFound() {
             Book the front page → Back to Grooma
           </Link>
           <Link
-            href="/"
+            href="/demo"
             className="inline-flex h-13 items-center rounded-full border border-hairline-strong px-7 text-base font-medium text-paper transition-colors hover:border-paper-dim"
           >
             Find a real appointment

@@ -68,16 +68,20 @@ export function Pricing() {
 
           <div className="mt-10 flex flex-wrap items-center gap-4">
             <a
-              href="https://wa.me/9779811420975?text=Hi%20Grooma%2C%20I%27d%20like%20to%20start%20my%20shop"
+              href={`${site.contact.whatsappLink}?text=${encodeURIComponent(
+                "Hi Grooma, I'd like to start my shop",
+              )}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex h-13 items-center gap-2 rounded-full bg-copper px-7 text-base font-semibold text-ink-soft transition-colors hover:bg-copper-bright"
+              className="inline-flex h-13 items-center gap-2 rounded-full bg-copper px-7 text-base font-semibold text-on-accent transition-colors hover:bg-copper-bright"
             >
               {plan.cta}
               <span aria-hidden="true">→</span>
             </a>
             <a
-              href="https://wa.me/9779811420975?text=Hi%20Grooma%2C%20I%27d%20like%20a%20live%20demo"
+              href={`${site.contact.whatsappLink}?text=${encodeURIComponent(
+                "Hi Grooma, I'd like a live demo",
+              )}`}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex h-13 items-center rounded-full border border-hairline-strong px-7 text-base font-medium text-paper transition-colors hover:border-paper-dim"
@@ -100,10 +104,17 @@ export function Pricing() {
 
       {/* Billing mode + currency selector */}
       <div className="order-1 lg:order-2">
-        <label className="font-grotesk mb-3 block text-xs tracking-[0.2em] text-metal uppercase">
+        <p
+          id="billing-mode-label"
+          className="font-grotesk mb-3 block text-xs tracking-[0.2em] text-metal uppercase"
+        >
           How you pay
-        </label>
-        <div className="flex flex-wrap gap-2">
+        </p>
+        <div
+          role="group"
+          aria-labelledby="billing-mode-label"
+          className="flex flex-wrap gap-2"
+        >
           {(
             [
               { id: "monthly", label: "Monthly" },
@@ -135,10 +146,17 @@ export function Pricing() {
             : "A simple monthly rate. Domain and deployment are set up and billed separately, so there are no surprise hosting fees bundled in."}
         </p>
 
-        <label className="font-grotesk mt-6 mb-3 block text-xs tracking-[0.2em] text-metal uppercase">
+        <p
+          id="currency-label"
+          className="font-grotesk mt-6 mb-3 block text-xs tracking-[0.2em] text-metal uppercase"
+        >
           Show pricing in
-        </label>
-        <div className="flex flex-wrap gap-2">
+        </p>
+        <div
+          role="group"
+          aria-labelledby="currency-label"
+          className="flex flex-wrap gap-2"
+        >
           {fx.currencies.map((c) => (
             <button
               key={c.code}

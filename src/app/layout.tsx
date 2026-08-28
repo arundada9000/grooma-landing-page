@@ -93,7 +93,9 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#0b0a09",
+  // Matches --color-ink for the default preset (minimal - dark). The theme
+  // provider rewrites this meta tag whenever the visitor picks another theme.
+  themeColor: "#0a0a0a",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -101,18 +103,18 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       suppressHydrationWarning
-      className={`h-full antialiased ${archivo.variable} ${space.variable} ${inter.variable} ${devanagari.variable}`}
+      className={`antialiased ${archivo.variable} ${space.variable} ${inter.variable} ${devanagari.variable}`}
     >
       <head>
         {/* Apply the saved theme/scheme before first paint to avoid any flash.
             Mirrors the storage key used by the ThemeProvider. */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var k="grooma:theme";var s=localStorage.getItem(k);var t="copper",m="dark";if(s){var c=JSON.parse(s);if(c&&c.theme)t=c.theme;if(c&&(c.scheme==="light"||c.scheme==="dark"))m=c.scheme}var d=document.documentElement;d.dataset.theme=t;d.dataset.scheme=m;d.style.colorScheme=m}catch(e){}})();`,
+            __html: `(function(){try{var k="grooma:theme";var s=localStorage.getItem(k);var t="minimal",m="dark";if(s){var c=JSON.parse(s);if(c&&c.theme)t=c.theme;if(c&&(c.scheme==="light"||c.scheme==="dark"))m=c.scheme}var d=document.documentElement;d.dataset.theme=t;d.dataset.scheme=m;d.style.colorScheme=m}catch(e){}})();`,
           }}
         />
       </head>
-      <body className="flex min-h-full flex-col bg-ink text-paper">
+      <body className="flex min-h-dvh flex-col bg-ink text-paper">
         <ThemeProvider>
           <SiteShell>{children}</SiteShell>
         </ThemeProvider>

@@ -55,17 +55,26 @@ export function ConcurrencyDemo() {
 
   const replay = () => setPhase("idle");
 
-  const arrived = phase === "requests" || phase === "engine";
+  /** The requests are in flight; nobody has an answer yet. */
+  const inFlight = phase === "requests" || phase === "engine";
+  /** The engine has settled the slot, so both actors can be told the truth. */
   const decided = phase === "accepted" || phase === "rejected";
 
+  /**
+   * A wins, always, and stays the winner for the rest of the story. The
+   * "accepted"/"rejected" phases narrate the two halves of the SAME outcome
+   * (one booking confirmed, one honestly turned away), they are not two
+   * different results.
+   */
   return (
     <div className="my-6">
       <div className="grid items-end gap-3 sm:grid-cols-[1fr_auto_1fr]">
         {/* A */}
         <CustomerActor
           name="Customer A"
-          arrived={arrived && decided}
-          accepted={phase === "rejected"}
+          arrived={decided}
+          accepted={decided}
+          inFlight={inFlight}
           reduce={!!reduce}
         />
         {/* Engine */}
@@ -87,8 +96,9 @@ export function ConcurrencyDemo() {
         {/* B */}
         <CustomerActor
           name="Customer B"
-          arrived={arrived && decided}
-          accepted={phase === "accepted"}
+          arrived={decided}
+          accepted={false}
+          inFlight={inFlight}
           reduce={!!reduce}
         />
       </div>
@@ -154,27 +164,36 @@ function CustomerActor({
   name,
   arrived,
   accepted,
+  inFlight,
   reduce,
 }: {
   name: string;
+  /** The verdict is in and can be shown to this customer. */
   arrived: boolean;
+  /** This customer got the chair. */
   accepted: boolean;
+  /** The request is on its way, no answer yet. */
+  inFlight: boolean;
   reduce: boolean;
 }) {
   return (
-    <motion.div
-      className="flex flex-col items-center gap-3 rounded-2xl border border-hairline p-4 text-center"
-      initial={false}
-      animate={accepted ? { borderColor: "rgba(159,198,164,0.5)" } : {}}
-      transition={{ duration: 0.4 }}
+    // Border state lives in classes, not an animated inline style: an
+    // `animate={{}}` fallback never restores the original colour, so replaying
+    // the race left the previous winner's card outlined in green.
+    <div
+      className={cn(
+        "flex flex-col items-center gap-3 rounded-2xl border p-4 text-center transition-colors duration-500",
+        arrived && accepted ? "border-ok/50" : "border-hairline",
+      )}
     >
       <span className="text-paper-dim text-sm">{name}</span>
       <span
         className={cn(
-          "rounded-xl px-4 py-2 font-grotesk text-lg transition-colors duration-300",
-          accepted
-            ? "text-ok-soft"
-            : "border border-hairline text-paper",
+          "rounded-xl border px-4 py-2 font-grotesk text-lg transition-colors duration-300",
+          arrived && accepted && "border-ok/50 bg-ok-soft text-ok",
+          arrived && !accepted && "border-hairline text-metal line-through",
+          !arrived && "border-hairline text-paper",
+          inFlight && "border-hairline-strong",
         )}
       >
         10:30
@@ -193,6 +212,6 @@ function CustomerActor({
           </motion.span>
         )}
       </AnimatePresence>
-    </motion.div>
+    </div>
   );
 }

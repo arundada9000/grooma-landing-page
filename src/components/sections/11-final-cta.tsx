@@ -3,12 +3,12 @@ import { Reveal } from "@/components/ui/reveal";
 import { Section } from "@/components/ui/section";
 
 /**
- * Section 10, The close. One honest invitation. No manufactured urgency,
+ * Section 11, The close. One honest invitation. No manufactured urgency,
  * no invented numbers, just "put your shop online."
  */
 export function FinalCta() {
   return (
-    <Section id="start" number="10" eyebrow="Start with your shop" bleed>
+    <Section id="start" number="11" eyebrow="Start with your shop" bleed>
       <div className="mx-auto max-w-3xl text-center">
         <Reveal>
           <p className="font-grotesk text-sm tracking-[0.2em] text-copper-bright uppercase">
@@ -30,10 +30,12 @@ export function FinalCta() {
         <Reveal delay={0.16}>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
             <a
-              href="https://wa.me/9779811420975?text=Hi%20Grooma%2C%20let%27s%20put%20my%20shop%20online"
+              href={`${site.contact.whatsappLink}?text=${encodeURIComponent(
+                "Hi Grooma, let's put my shop online",
+              )}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex h-14 items-center gap-2 rounded-full bg-copper px-8 text-lg font-semibold text-ink-soft transition-colors hover:bg-copper-bright"
+              className="inline-flex h-14 items-center gap-2 rounded-full bg-copper px-8 text-lg font-semibold text-on-accent transition-colors hover:bg-copper-bright"
             >
               Start your shop
               <span aria-hidden="true">→</span>

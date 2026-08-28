@@ -1,21 +1,18 @@
 import type { MetadataRoute } from "next";
+import { seo } from "@/config/seo";
 import { site } from "@/config/site";
 
-const routes: Array<{ path: string; priority: number; changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"] }> = [
-  { path: "/", priority: 1, changeFrequency: "weekly" },
-  { path: "/features", priority: 0.9, changeFrequency: "monthly" },
-  { path: "/pricing", priority: 0.9, changeFrequency: "monthly" },
-  { path: "/for-barbershops", priority: 0.8, changeFrequency: "monthly" },
-  { path: "/demo", priority: 0.8, changeFrequency: "monthly" },
-  { path: "/about", priority: 0.6, changeFrequency: "monthly" },
-];
-
+/**
+ * The route set lives in `seo.pages` so the sitemap can never drift from the
+ * list the rest of the SEO config is written against.
+ */
 export default function sitemap(): MetadataRoute.Sitemap {
-  const today = new Date();
-  return routes.map((r) => ({
+  const lastModified = new Date();
+  return seo.pages.map((r) => ({
     url: new URL(r.path, site.url).toString(),
-    lastModified: today,
-    changeFrequency: r.changeFrequency,
+    lastModified,
+    changeFrequency:
+      r.changeFrequency as MetadataRoute.Sitemap[number]["changeFrequency"],
     priority: r.priority,
   }));
 }

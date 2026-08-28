@@ -9,7 +9,9 @@ import { site } from "@/config/site";
 export function Footer() {
   return (
     <footer className="border-hairline-top bg-ink">
-      <div className="mx-auto w-full max-w-6xl px-5 py-16 sm:px-8">
+      {/* Extra bottom room under md: the fixed mobile nav sits on top of the
+          last rows otherwise. */}
+      <div className="mx-auto w-full max-w-6xl px-5 pt-16 pb-[calc(4rem+env(safe-area-inset-bottom))] sm:px-8 md:pb-16">
         <div className="grid gap-12 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
           {/* Brand */}
           <div>

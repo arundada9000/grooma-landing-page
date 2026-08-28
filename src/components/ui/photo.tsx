@@ -13,6 +13,7 @@ export function Photo({
   className,
   imgClassName,
   priority = false,
+  sizes = "(max-width: 768px) 100vw, 50vw",
 }: {
   src: string;
   alt?: string;
@@ -21,6 +22,12 @@ export function Photo({
   className?: string;
   imgClassName?: string;
   priority?: boolean;
+  /**
+   * Layout width hint for the responsive source set. The default suits a
+   * half-column photo; pass the real width for full-bleed banners or the
+   * browser downloads a source too small for the slot.
+   */
+  sizes?: string;
 }) {
   return (
     <div
@@ -31,7 +38,7 @@ export function Photo({
         src={src}
         alt={alt}
         fill
-        sizes="(max-width: 768px) 100vw, 50vw"
+        sizes={sizes}
         priority={priority}
         className={cn("object-cover", imgClassName)}
       />

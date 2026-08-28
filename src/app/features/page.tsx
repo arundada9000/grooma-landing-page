@@ -7,15 +7,12 @@ import { Brand } from "@/components/sections/05-brand";
 import { OwnerDay } from "@/components/sections/06-owner-day";
 import { Engine } from "@/components/sections/09-engine";
 import { FinalCta } from "@/components/sections/11-final-cta";
-import {
-  ProductDashboard,
-  ProductOffline,
-  ProductQr,
-} from "@/components/product/product-screens";
+import { ProductTour } from "@/components/sections/13-product-tour";
 import { StructuredData } from "@/components/seo/structured-data";
 import { buildPageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = buildPageMetadata({
+/** One description of this route, read by both the <head> and the JSON-LD. */
+const PAGE = {
   title: "Features | Booking, availability & owner dashboard",
   description:
     "Grooma's features: computed availability that never shows a fake slot, no double-bookings, an owner dashboard that runs the floor, your own brand, and an offline-capable app. Works in English and नेपाली.",
@@ -27,12 +24,15 @@ export const metadata: Metadata = buildPageMetadata({
     "barbershop availability engine",
     "salon booking software features",
   ],
-});
+  crumb: "Features",
+};
+
+export const metadata: Metadata = buildPageMetadata(PAGE);
 
 export default function FeaturesPage() {
   return (
     <>
-      <StructuredData crumb={{ label: "Features", path: "/features" }} />
+      <StructuredData page={PAGE} />
       <PageHero
         eyebrow="Features"
         title={
@@ -46,7 +46,7 @@ export default function FeaturesPage() {
         <div className="mt-8 flex flex-wrap items-center gap-3">
           <Link
             href="/demo"
-            className="press inline-flex h-12 items-center gap-2 rounded-full bg-copper px-6 text-base font-semibold text-ink-soft hover:bg-copper-bright"
+            className="press inline-flex h-12 items-center gap-2 rounded-full bg-copper px-6 text-base font-semibold text-on-accent hover:bg-copper-bright"
           >
             Try the demo
             <span aria-hidden="true">→</span>
@@ -64,25 +64,10 @@ export default function FeaturesPage() {
       <Concurrency />
 
       {/* Product surfaces, drawn as the product, not as mockups. */}
-      <section className="relative border-hairline-top bg-ink-soft py-14 sm:py-28">
-        <div className="mx-auto w-full max-w-6xl px-5 sm:px-8">
-          <div className="grid items-start gap-6 lg:grid-cols-3">
-            <div className="space-y-4">
-              <ProductDashboard />
-            </div>
-            <div className="space-y-4 lg:mt-8">
-              <ProductOffline />
-            </div>
-            <div className="space-y-4">
-              <ProductQr />
-            </div>
-          </div>
-          <p className="mt-8 text-center text-sm text-metal">
-            Pixel previews of the interfaces, not screenshots of a live shop.
-            Nothing shown here promises real appointments.
-          </p>
-        </div>
-      </section>
+      <ProductTour
+        heading="The surfaces you actually work in."
+        blurb="The owner's day, the booking app that survives a dead signal, and the code that lives on the counter."
+      />
 
       <OwnerDay />
       <Brand />

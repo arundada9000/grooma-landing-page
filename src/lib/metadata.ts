@@ -9,8 +9,12 @@ export interface PageMetaInput {
   path: string;
   /** Optional extra keywords specific to the page. */
   keywords?: string[];
-  /** JSON-LD types this page should carry in addition to the shared ones. */
-  structuredData?: "BreadcrumbList"[];
+  /**
+   * Breadcrumb label, consumed by the JSON-LD rather than the <head>. Pages
+   * pass one object to both `buildPageMetadata` and `<StructuredData>`, so it
+   * is accepted (and ignored) here.
+   */
+  crumb?: string;
 }
 
 /**

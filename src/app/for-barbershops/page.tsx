@@ -12,7 +12,8 @@ import { Photo } from "@/components/ui/photo";
 import { StructuredData } from "@/components/seo/structured-data";
 import { buildPageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = buildPageMetadata({
+/** One description of this route, read by both the <head> and the JSON-LD. */
+const PAGE = {
   title: "For barbershops | Built for shop owners in Nepal",
   description:
     "Grooma for barbershops: a booking page for your customers, a calm dashboard for your day, honest availability, no double-bookings, and an offline app that survives patchy data. Built Nepal-first in English and नेपाली.",
@@ -24,12 +25,15 @@ export const metadata: Metadata = buildPageMetadata({
     "barbershop management dashboard",
     "Nepali barbershop app",
   ],
-});
+  crumb: "For barbershops",
+};
+
+export const metadata: Metadata = buildPageMetadata(PAGE);
 
 export default function ForBarbershopsPage() {
   return (
     <>
-      <StructuredData crumb={{ label: "For barbershops", path: "/for-barbershops" }} />
+      <StructuredData page={PAGE} withHowTo />
 
       <PageHero
         eyebrow="For barbershops"
@@ -39,12 +43,12 @@ export default function ForBarbershopsPage() {
             <span className="text-copper-bright">works the floor.</span>
           </>
         }
-        blurb="Booking is the front door of your shop, and it should never take you away from a client or a the till. Grooma keeps the day honest without turning you into a computer operator."
+        blurb="Booking is the front door of your shop, and it should never take you away from a client or the till. Grooma keeps the day honest without turning you into a computer operator."
       >
         <div className="mt-8 flex flex-wrap items-center gap-3">
           <Link
             href="/demo"
-            className="press inline-flex h-12 items-center gap-2 rounded-full bg-copper px-6 text-base font-semibold text-ink-soft hover:bg-copper-bright"
+            className="press inline-flex h-12 items-center gap-2 rounded-full bg-copper px-6 text-base font-semibold text-on-accent hover:bg-copper-bright"
           >
             Try the demo
             <span aria-hidden="true">→</span>
@@ -62,6 +66,7 @@ export default function ForBarbershopsPage() {
         src="/images/barbershop-2.jpg"
         alt="A barber trimming a customer's beard in the chair"
         ratio="21 / 9"
+        sizes="(max-width: 1152px) 100vw, 1152px"
         className="mx-auto mb-14 w-full max-w-6xl"
         priority
       />
@@ -72,9 +77,10 @@ export default function ForBarbershopsPage() {
       <Concurrency />
 
       <Photo
-        src="/images/barbershop-4.jpg"
+        src="/images/barbershop-3.jpg"
         alt="Barber tools laid out on a counter"
         ratio="21 / 9"
+        sizes="(max-width: 1152px) 100vw, 1152px"
         className="mx-auto my-14 w-full max-w-6xl"
       />
 

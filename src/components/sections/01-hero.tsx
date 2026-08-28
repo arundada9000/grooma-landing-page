@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
+import { useLenis } from "lenis/react";
 import { BookingFlow } from "@/components/demo/booking-flow";
 import { Reveal } from "@/components/ui/reveal";
 import { feedback } from "@/lib/sound";
@@ -17,11 +18,23 @@ import { feedback } from "@/lib/sound";
  */
 export function Hero() {
   const reduce = useReducedMotion();
+  const lenis = useLenis();
 
   const go = (href: string) => (e: React.MouseEvent) => {
     e.preventDefault();
     feedback("click");
-    document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
+    const target = document.querySelector(href);
+    if (!target) return;
+    // offset clears the fixed 4rem header; scrollIntoView would tuck the
+    // section heading underneath it.
+    if (lenis) {
+      lenis.scrollTo(target as HTMLElement, {
+        offset: -80,
+        immediate: !!reduce,
+      });
+      return;
+    }
+    target.scrollIntoView({ behavior: reduce ? "auto" : "smooth" });
   };
 
   return (

@@ -10,7 +10,8 @@ import { StructuredData } from "@/components/seo/structured-data";
 import { buildPageMetadata } from "@/lib/metadata";
 import { demoNotice } from "@/config/site";
 
-export const metadata: Metadata = buildPageMetadata({
+/** One description of this route, read by both the <head> and the JSON-LD. */
+const PAGE = {
   title: "Demo | Try the booking flow live",
   description:
     "Try Grooma's real booking flow, availability engine and theme switcher in your browser. No account, no sign-up, no database. See how guest booking and no double-bookings actually work.",
@@ -21,12 +22,15 @@ export const metadata: Metadata = buildPageMetadata({
     "barbershop scheduling demo",
     "live barbershop booking demo",
   ],
-});
+  crumb: "Demo",
+};
+
+export const metadata: Metadata = buildPageMetadata(PAGE);
 
 export default function DemoPage() {
   return (
     <>
-      <StructuredData crumb={{ label: "Demo", path: "/demo" }} />
+      <StructuredData page={PAGE} withHowTo />
 
       <PageHero
         eyebrow="Interactive demo"

@@ -1,13 +1,12 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   AnimatePresence,
   motion,
   useReducedMotion,
   useInView,
 } from "framer-motion";
-import { useRef } from "react";
 import { cn } from "@/lib/cn";
 
 /**
@@ -72,9 +71,15 @@ export function AvailabilityEngine() {
     return () => clearTimeout(t);
   }, [inView, reduce]);
 
+  const replayTimer = useRef<ReturnType<typeof setTimeout> | undefined>(
+    undefined,
+  );
+  useEffect(() => () => clearTimeout(replayTimer.current), []);
+
   const replay = () => {
     setDone(false);
-    setTimeout(() => setDone(true), reduce ? 0 : 60);
+    clearTimeout(replayTimer.current);
+    replayTimer.current = setTimeout(() => setDone(true), reduce ? 0 : 60);
   };
   const revealMechanism = () => setShowMechanism(true);
 
@@ -121,25 +126,29 @@ export function AvailabilityEngine() {
             What a customer can actually book
           </p>
           <div className="grid grid-cols-3 gap-3">
-            {slots.map((label, i) => {
-              const appears = done && i < (reduce ? slots.length : 5);
-              return (
-                <motion.div
-                  key={label}
-                  initial={false}
-                  animate={
-                    appears ? { opacity: 1, scale: 1 } : { opacity: 0.28, scale: 0.96 }
-                  }
-                  transition={{ delay: 0.12 * i, duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-                  className="flex h-14 items-center justify-center rounded-xl border border-hairline text-center font-grotesk text-lg text-copper-bright"
-                  style={{
-                    backgroundColor: appears ? "transparent" : "transparent",
-                  }}
-                >
-                  {label}
-                </motion.div>
-              );
-            })}
+            {slots.map((label, i) => (
+              // Every computed slot lands, staggered. Capping the reveal at a
+              // fixed count left most of the day permanently ghosted, which
+              // read as "these times are unavailable" - the opposite of the
+              // point this section is making.
+              <motion.div
+                key={label}
+                initial={false}
+                animate={
+                  done
+                    ? { opacity: 1, scale: 1 }
+                    : { opacity: 0.28, scale: 0.96 }
+                }
+                transition={{
+                  delay: done && !reduce ? Math.min(0.06 * i, 0.9) : 0,
+                  duration: reduce ? 0 : 0.45,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
+                className="flex h-14 items-center justify-center rounded-xl border border-hairline text-center font-grotesk text-lg text-copper-bright"
+              >
+                {label}
+              </motion.div>
+            ))}
           </div>
 
           <div className="mt-5 flex flex-wrap items-center gap-4">

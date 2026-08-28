@@ -47,15 +47,18 @@ export const site = {
     portfolio: "https://arunneupane.vercel.app",
   },
 
+  /**
+   * Primary page navigation, rendered by the header. These are routes, not
+   * in-page anchors: the site is multipage, and several of the old anchors
+   * (#brand, #nepal) only exist on interior pages, so linking to them from
+   * every page went nowhere.
+   */
   nav: [
-    { href: "#book", label: "Book" },
-    { href: "#availability", label: "Availability" },
-    { href: "#brand", label: "Your brand" },
-    { href: "#for-owners", label: "For owners" },
-    { href: "#nepal", label: "Nepal" },
-    { href: "#pricing", label: "Pricing" },
-    { href: "#guarantees", label: "Guarantees" },
-  ],
+    { href: "/features", label: "Features" },
+    { href: "/pricing", label: "Pricing" },
+    { href: "/for-barbershops", label: "For barbershops" },
+    { href: "/about", label: "About" },
+  ] as const,
 };
 
 /**
@@ -71,14 +74,15 @@ export const site = {
  */
 export type CurrencyCode = "NPR" | "USD";
 
-export interface CurrencyInfo {
-  code: CurrencyCode;
+export interface Currency {
+  code: string;
   symbol: string;
-  label: string;
-  /** NPR base, per place value. */
-  npr: number;
-  /** USD base. */
-  usd: number;
+  name: string;
+  /**
+   * US dollars one unit is worth. Omitted for the two anchor currencies:
+   * USD is 1 by definition and NPR is derived from `usdPerNpr` below.
+   */
+  usd?: number;
 }
 
 export interface PricePoint {
@@ -101,7 +105,7 @@ export interface PricePoint {
 }
 
 /** Editable FX, controls how any third currency converts from USD/NPR. */
-export const fx = {
+export const fx: { usdPerNpr: number; currencies: Currency[] } = {
   usdPerNpr: 1 / 135.0, // ~NPR 135 = 1 USD (edit as rates move)
   currencies: [
     { code: "NPR", symbol: "रू", name: "Nepalese Rupee" },
@@ -111,7 +115,7 @@ export const fx = {
     { code: "EUR", symbol: "€", name: "Euro", usd: 1.12 },
     { code: "AED", symbol: "د.إ", name: "UAE Dirham", usd: 0.27 },
     { code: "AUD", symbol: "A$", name: "Australian Dollar", usd: 0.68 },
-  ] as Array<{ code: string; symbol: string; name: string; usd: number }>,
+  ],
 };
 
 export const pricing: {

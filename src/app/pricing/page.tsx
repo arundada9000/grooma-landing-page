@@ -9,7 +9,8 @@ import { StructuredData } from "@/components/seo/structured-data";
 import { buildPageMetadata } from "@/lib/metadata";
 import { pricing } from "@/config/site";
 
-export const metadata: Metadata = buildPageMetadata({
+/** One description of this route, read by both the <head> and the JSON-LD. */
+const PAGE = {
   title: "Pricing | One transparent plan per shop",
   description:
     "Grooma costs one transparent plan per barbershop, shown in your currency. No per-booking fees, no forced contracts. See exactly what's included and how to go live.",
@@ -20,14 +21,17 @@ export const metadata: Metadata = buildPageMetadata({
     "salon booking software pricing",
     "barbershop software per month",
   ],
-});
+  crumb: "Pricing",
+};
+
+export const metadata: Metadata = buildPageMetadata(PAGE);
 
 const INCLUDED = (pricing.plans[0]?.includes ?? []).filter(Boolean);
 
 export default function PricingPage() {
   return (
     <>
-      <StructuredData crumb={{ label: "Pricing", path: "/pricing" }} withFaq />
+      <StructuredData page={PAGE} withFaq />
 
       <PageHero
         eyebrow="Pricing"
@@ -94,6 +98,7 @@ export default function PricingPage() {
         src="/images/barbershop-1.jpg"
         alt="A barber at work in a busy barbershop"
         ratio="21 / 9"
+        sizes="(max-width: 1152px) 100vw, 1152px"
         className="mx-auto my-14 w-full max-w-6xl"
         priority={false}
       />
