@@ -45,11 +45,11 @@
   /* Named "copper" for historical reasons; these are the ACCENT tokens and
      they re-resolve per theme. The values here are the minimal preset, the
      site default, used only before the theme attributes are applied. */
-  --color-copper: #ededed;
-  --color-copper-bright: #f4f4f4;
-  --color-copper-deep: #a8a8a8;
-  --color-copper-soft: rgba(237, 237, 237, 0.1);
-  --color-on-accent: #111111;
+  --color-copper: #cf9d61;
+  --color-copper-bright: #e4c6a4;
+  --color-copper-deep: #9a7444;
+  --color-copper-soft: rgba(207, 157, 97, 0.16);
+  --color-on-accent: #171207;
 
   /* State colors (semantic, theme-independent) */
   --color-ok: #9fc6a4;
@@ -83,11 +83,11 @@
   --color-panel: #161616;
   --color-fg: #ededed;
   --color-fg-dim: rgba(237, 237, 237, 0.62);
-  --color-accent: #ededed;
-  --color-accent-soft: rgba(237, 237, 237, 0.1);
-  --color-on-accent: #111111;
-  --color-accent-bright: #f4f4f4;
-  --color-accent-deep: #a8a8a8;
+  --color-accent: #cf9d61;
+  --color-accent-soft: rgba(207, 157, 97, 0.16);
+  --color-on-accent: #171207;
+  --color-accent-bright: #e4c6a4;
+  --color-accent-deep: #9a7444;
 }
 
 /* ============================================================
@@ -154,7 +154,14 @@
   --color-on-accent: #0a1024;
 }
 
-/* ---- Minimal ---- */
+/* ---- Minimal (the site default) ----
+   Neutral surfaces, but the accent keeps the brand copper. A monochrome
+   accent is the same colour as body text, which silently deletes every
+   highlight the design relies on: the emphasised half of each headline, the
+   eyebrows, section numbers and prices all flatten into the paragraph around
+   them. Keeping a hue here is what makes "minimal" read as restrained rather
+   than as undifferentiated. The Copper preset stays distinct by carrying the
+   warmth into its surfaces too; here only the accent is warm. */
 [data-theme="minimal"][data-scheme="dark"],
 [data-theme="minimal"] {
   --color-ink: #0a0a0a;
@@ -164,9 +171,9 @@
   --color-fg-dim: rgba(237, 237, 237, 0.62);
   --color-metal: rgba(237, 237, 237, 0.45);
   --color-hairline: rgba(237, 237, 237, 0.12);
-  --color-accent: #ededed;
-  --color-accent-soft: rgba(237, 237, 237, 0.1);
-  --color-on-accent: #111111;
+  --color-accent: #cf9d61;
+  --color-accent-soft: rgba(207, 157, 97, 0.16);
+  --color-on-accent: #171207;
 }
 [data-theme="minimal"][data-scheme="light"] {
   --color-ink: #fafafa;
@@ -176,9 +183,9 @@
   --color-fg-dim: rgba(17, 17, 17, 0.62);
   --color-metal: rgba(17, 17, 17, 0.45);
   --color-hairline: rgba(17, 17, 17, 0.12);
-  --color-accent: #111111;
-  --color-accent-soft: rgba(0, 0, 0, 0.06);
-  --color-on-accent: #ffffff;
+  --color-accent: #8a5a2b;
+  --color-accent-soft: rgba(138, 90, 43, 0.12);
+  --color-on-accent: #fdf7ef;
 }
 
 /* ---- Emerald ---- */

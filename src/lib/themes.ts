@@ -36,6 +36,13 @@ export interface ThemePreset {
   display: string; // Tailwind class name family for the marketing chrome
   light: ThemeTokens;
   dark: ThemeTokens;
+  /**
+   * Accent the SITE chrome uses for this preset, where it differs from the
+   * product's own. The header swatch previews the site, so it reads this
+   * first; the tokens above stay faithful to the product presets that the
+   * booking demo renders with. Defaults to `dark.accent`.
+   */
+  siteAccent?: string;
 }
 
 function tokens(lightPartial: Partial<ThemeTokens>, darkPartial: Partial<ThemeTokens>): {
@@ -141,6 +148,9 @@ export const THEME_PRESETS: ThemePreset[] = [
     name: "Minimal",
     flavor: "Quiet, precise, editorial",
     display: "geist",
+    // Neutral surfaces, warm accent: see the Minimal block in globals.css for
+    // why the site keeps a hue here even though the product preset does not.
+    siteAccent: "#cf9d61",
     ...tokens(
       {
         background: "#fafafa",

@@ -18,12 +18,17 @@ export function ThemeSwitcher() {
 
   const vars = themeCssVars(current[scheme]);
 
+  /** Only cross-fade once the visitor has actually changed something. */
+  const [switched, setSwitched] = useState(false);
+
   const pick = useCallback((p: ThemePreset) => {
     setCurrent(p);
+    setSwitched(true);
     feedback("select", { haptic: true });
   }, []);
   const flip = useCallback(() => {
     setScheme((s) => (s === "dark" ? "light" : "dark"));
+    setSwitched(true);
     feedback("toggle");
   }, []);
 
@@ -92,7 +97,7 @@ export function ThemeSwitcher() {
 
         <motion.div
           key={current.id + scheme}
-          initial={{ opacity: 0, y: 8 }}
+          initial={switched ? { opacity: 0, y: 8 } : false}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
           className="transition-all duration-300"

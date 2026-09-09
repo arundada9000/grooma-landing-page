@@ -137,7 +137,7 @@ export function ThemeToggle() {
                   <span
                     aria-hidden="true"
                     className="h-4 w-4 shrink-0 rounded-full ring-1 ring-white/15"
-                    style={{ backgroundColor: p.dark.accent }}
+                    style={{ backgroundColor: p.siteAccent ?? p.dark.accent }}
                   />
                   <span className="flex-1">
                     <span className={cn("block text-sm leading-tight", active ? "text-paper" : "text-paper-dim")}>

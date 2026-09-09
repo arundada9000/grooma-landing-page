@@ -536,7 +536,7 @@ function ConfirmStep({
 
 function StepTitle({ step, title }: { step: number; title: string }) {
   return (
-    <h3
+    <p
       className="mb-3 flex items-center gap-2 text-lg font-semibold tracking-tight"
       style={{ color: "var(--demo-label)" }}
     >
@@ -544,6 +544,6 @@ function StepTitle({ step, title }: { step: number; title: string }) {
         {String(step).padStart(2, "0")}
       </span>
       {title}
-    </h3>
+    </p>
   );
 }

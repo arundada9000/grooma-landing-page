@@ -95,3 +95,23 @@ this project adheres to [Semantic Versioning](https://semver.org/).
 - `barbershop-4.jpg` is a tall portrait and was being cropped into a 21:9 band,
   discarding most of the frame. Photographs now sit in slots shaped like them,
   and the unused fifth plate is in service.
+- The scroll reveals rendered `opacity: 0` into the SERVER HTML, so 52% of the
+  home page's text (the `<h1>` included) was invisible until a ~900KB bundle
+  downloaded and hydrated. On the patchy connections this product is sold for
+  that is a blank page, and it also printed blank and showed nothing at all if
+  the bundle failed. The settled state is now the default and the reveal is
+  armed afterwards, only for content below the fold. Every route ships 0
+  hidden elements.
+- Added a one-time probe for IntersectionObserver: screenshot services, PDF
+  renderers and some embedded webviews construct one and never fire it, which
+  would leave every armed reveal hidden forever. If it turns out inert,
+  nothing hides.
+- Minimal, now the default preset, made the accent the same colour as body
+  text (1.07:1), silently deleting every highlight in the design: the
+  emphasised half of each headline, the eyebrows, section numbers and prices
+  all flattened into the paragraph around them. Its surfaces stay neutral but
+  the accent keeps the brand copper (1.39:1 dark / 1.77:1 light, plus a hue
+  difference), and the header swatch follows.
+- Heading outline: the booking demo's step labels were `<h3>` under the hero's
+  `<h1>` with no `<h2>` between, and the availability mechanism cards were
+  `<h4>` under an `<h2>`.

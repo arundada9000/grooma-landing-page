@@ -93,16 +93,13 @@ export function AvailabilityEngine() {
           </p>
           <div className="space-y-2">
             {CONSTRAINTS.map((c, i) => (
-              <motion.div
+              <div
                 key={c.label}
-                initial={reduce ? { opacity: 1 } : { opacity: 0, x: -14 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.05 * i, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                 className="flex items-center justify-between gap-4 border-b py-3 border-hairline"
               >
                 <span className="text-paper-dim">{c.label}</span>
                 <span className="font-grotesk text-sm text-paper">{c.value}</span>
-              </motion.div>
+              </div>
             ))}
           </div>
 
@@ -218,7 +215,7 @@ function Mechanism({
   return (
     <div className="rounded-2xl border border-hairline p-5">
       <div className="font-grotesk text-sm text-copper-bright">{index}</div>
-      <h4 className="mt-2 font-semibold text-paper">{title}</h4>
+      <h3 className="mt-2 font-semibold text-paper">{title}</h3>
       <p className="mt-2 text-sm leading-relaxed text-paper-dim">{body}</p>
     </div>
   );
